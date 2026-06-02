@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>YOUTIC — MERGED</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+<style>
+  html,body{height:100%;background:#0a0a0a;color:white;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto}
+  .scrollbar-hide::-webkit-scrollbar{display:none}
+  .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
+  *{-webkit-tap-highlight-color: transparent}
+</style>
+</head>
+<body class="bg-[#0a0a0a] antialiased">
+<!-- AUTH SCREEN -->
+<div id="authScreen" class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-8">
+      <h1 class="text-[48px] leading-none font-black tracking-tight bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] bg-clip-text text-transparent">YOUTIC</h1>
+      <p class="text-white/60 mt-2 text-[14px]">Create. Share. Inspire.</p>
+    </div>
+    
+    <div class="bg-[#111] rounded-[28px] p-1 flex mb-6 border border-white/5">
+      <button id="tabSignin" class="flex-1 py-2.5 rounded-[22px] text-[14px] font-semibold transition bg-[#1a1a1a] text-white">Sign In</button>
+      <button id="tabSignup" class="flex-1 py-2.5 rounded-[22px] text-[14px] font-semibold transition text-white/60">Create Account</button>
+    </div>
+
+    <form id="formSignin" class="space-y-3">
+      <div>
+        <input id="siEmail" type="email" autocomplete="email" placeholder="Email" class="w-full bg-[#1a1a1a] border border-white/10 rounded-2xl px-4 py-3.5 text-[15px] outline-none focus:border-[#ff2d75] transition">
+        <p id="err-siEmail" class="text-red-500 text-xs mt-1.5 hidden"></p>
+      </div>
+      <div>
+        <input id="siPass" type="password" autocomplete="current-password" placeholder="Password" class="w-full bg-[#1a1a1a] border border-white/10 rounded-2xl px-4 py-3.5 text-[15px] outline-none focus:border-[#ff2d75] transition">
+        <p id="err-siPass" class="text-red-500 text-xs mt-1.5 hidden"></p>
+      </div>
+      <button type="submit" id="btnSignin" class="w-full py-3.5 rounded-2xl font-semibold bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] hover:opacity-95 active:opacity-90 transition text-[15px] mt-1">Sign In</button>
+      <p id="err-siGeneral" class="text-red-500 text-xs text-center hidden pt-1"></p>
+    </form>
+
+    <form id="formSignup" class="space-y-3 hidden">
+      <div>
+        <input id="suName" type="text" placeholder="Display Name" class="w-full bg-[#1a1a1a] border border-white/10 rounded-2xl px-4 py-3.5 text-[15px] outline-none focus:border-[#ff2d75]">
+        <p id="err-suName" class="text-red-500 text-xs mt-1.5 hidden"></p>
+      </div>
+      <div>
+        <input id="suUser" type="text" placeholder="username" autocapitalize="off" class="w-full bg-[#1a1a1a] border border-white/10 rounded-2xl px-4 py-3.5 text-[15px] outline-none focus:border-[#ff2d75]">
+        <p id="err-suUser" class="text-red-500 text-xs mt-1.5 hidden"></p>
+      </div>
+      <div>
+        <input id="suEmail" type="email" placeholder="Email" class="w-full bg-[#1a1a1a] border border-white/10 rounded-2xl px-4 py-3.5 text-[15px] outline-none focus:border-[#ff2d75]">
+        <p id="err-suEmail" class="text-red-500 text-xs mt-1.5 hidden"></p>
+      </div>
+      <div>
+        <input id="suPass" type="password" placeholder="Password (min 6)" class="w-full bg-[#1a1a1a] border border-white/10 rounded-2xl px-4 py-3.5 text-[15px] outline-none focus:border-[#ff2d75]">
+        <p id="err-suPass" class="text-red-500 text-xs mt-1.5 hidden"></p>
+      </div>
+      <div>
+        <input id="suPass2" type="password" placeholder="Confirm Password" class="w-full bg-[#1a1a1a] border border-white/10 rounded-2xl px-4 py-3.5 text-[15px] outline-none focus:border-[#ff2d75]">
+        <p id="err-suPass2" class="text-red-500 text-xs mt-1.5 hidden"></p>
+      </div>
+      <button type="submit" id="btnSignup" class="w-full py-3.5 rounded-2xl font-semibold bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] hover:opacity-95 transition text-[15px] mt-1">Create Account</button>
+      <p id="err-suGeneral" class="text-red-500 text-xs text-center hidden pt-1"></p>
+    </form>
+
+    <p class="text-[11px] text-white/30 text-center mt-8">By continuing you agree to our Terms</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <div class="max-w-[430px] mx-auto min-h-screen bg-[#0a0a0a] relative flex flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-[#0a0a0a]/85 backdrop-blur-xl border-b border-white/5">
+      <div class="flex items-center justify-between px-4 h-[56px]">
+        <h1 class="text-[26px] font-black tracking-tight bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] bg-clip-text text-transparent">YOUTIC</h1>
+        <div id="welcome" class="text-[13px] text-white/60 font-medium"></div>
+      </div>
+      <div class="px-3 pb-3 overflow-x-auto scrollbar-hide">
+        <div class="flex gap-2">
+          <button data-tab="short" class="tab-pill px-4 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] text-white">YouShort</button>
+          <button data-tab="video" class="tab-pill px-4 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition bg-white/5 text-white/60">YouVideo</button>
+          <button data-tab="photo" class="tab-pill px-4 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition bg-white/5 text-white/60">YouI</button>
+          <button data-tab="text" class="tab-pill px-4 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition bg-white/5 text-white/60">YouX</button>
+          <button data-tab="game" class="tab-pill px-4 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition bg-white/5 text-white/60">YouGame</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Feed -->
+    <main id="feed" class="flex-1 overflow-y-auto pb-[90px] scrollbar-hide"></main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30">
+      <div class="mx-3 mb-[max(8px,env(safe-area-inset-bottom))] bg-[#111111]/90 backdrop-blur-2xl border border-white/10 rounded-[28px] shadow-2xl shadow-black/50">
+        <div class="flex items-center justify-around h-[68px] px-2">
+          <button data-view="home" class="nav-btn flex flex-col items-center justify-center gap-1 w-[64px] text-white">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z"/></svg>
+            <span class="text-[10px] font-medium">Home</span>
+          </button>
+          <button data-view="search" class="nav-btn flex flex-col items-center justify-center gap-1 w-[64px] text-white/50">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="text-[10px]">Search</span>
+          </button>
+          <button id="btnPlus" class="relative -top-5 w-[64px] h-[64px] rounded-full bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#ff2d75]/25 active:scale-95 transition">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button data-view="inbox" class="nav-btn flex flex-col items-center justify-center gap-1 w-[64px] text-white/50">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-17 0V7l8-4 8 4v4.5z"/><path d="M3 12v2a8 8 0 0 0 16 0v-2"/></svg>
+            <span class="text-[10px]">Inbox</span>
+          </button>
+          <button data-view="profile" class="nav-btn flex flex-col items-center justify-center gap-1 w-[64px] text-white/50">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-4 3.5-6 7-6s7 2 7 6"/></svg>
+            <span class="text-[10px]">Profile</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div id="uploadModal" class="fixed inset-0 z-50 hidden">
+  <div id="modalBackdrop" class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px]">
+    <div class="bg-[#141414] rounded-t-[32px] border-t border-white/10 p-5 pb-[calc(20px+env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-5"></div>
+      <h3 class="text-[20px] font-bold mb-4">Create</h3>
+      
+      <div class="flex gap-2 mb-4">
+        <button data-utype="short" class="utype px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#ff2d75] to-[#7c3aed]">Short</button>
+        <button data-utype="video" class="utype px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-white/10 text-white/70">Video</button>
+        <button data-utype="photo" class="utype px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-white/10 text-white/70">Photo</button>
+        <button data-utype="text" class="utype px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-white/10 text-white/70">Text</button>
+      </div>
+
+      <div id="fileWrap" class="mb-3">
+        <input id="fileInput" type="file" class="hidden" accept="video/*">
+        <button id="pickFile" class="w-full py-10 border-2 border-dashed border-white/15 rounded-2xl text-white/60 text-[14px] hover:border-white/25 transition">Tap to select video</button>
+        <p id="fileName" class="text-xs text-white/50 mt-2 hidden"></p>
+      </div>
+
+      <textarea id="caption" placeholder="Write a caption..." maxlength="500" class="w-full bg-[#0f0f0f] border border-white/10 rounded-2xl p-3.5 text-[14px] h-[100px] outline-none focus:border-[#ff2d75] resize-none placeholder:text-white/30"></textarea>
+
+      <div id="progressWrap" class="hidden mt-4">
+        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div id="progressBar" class="h-full w-0 bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] transition-all duration-200"></div>
+        </div>
+        <p id="progressText" class="text-xs text-white/60 mt-1.5">Uploading...</p>
+      </div>
+
+      <button id="btnUpload" class="w-full mt-4 py-3.5 rounded-2xl font-semibold bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] active:scale-[0.98] transition disabled:opacity-50 text-[15px]">Upload</button>
+      <p id="uploadError" class="text-red-500 text-xs mt-2 text-center hidden"></p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
+
+// --- REPLACE WITH YOUR CONFIG ---
+const firebaseConfig = {
+  apiKey: "AIzaSyC-PLACEHOLDER-REPLACE-ME",
+  authDomain: "youtic-app.firebaseapp.com",
+  projectId: "youtic-app",
+  storageBucket: "youtic-app.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "1:000000000000:web:000000000000"
+};
+
+const appFB = initializeApp(firebaseConfig);
+const auth = getAuth(appFB);
+const db = getFirestore(appFB);
+const storage = getStorage(appFB);
+
+// Elements
+const authScreen = document.getElementById('authScreen');
+const appEl = document.getElementById('app');
+const tabSignin = document.getElementById('tabSignin');
+const tabSignup = document.getElementById('tabSignup');
+const formSignin = document.getElementById('formSignin');
+const formSignup = document.getElementById('formSignup');
+const welcome = document.getElementById('welcome');
+const feed = document.getElementById('feed');
+const btnPlus = document.getElementById('btnPlus');
+const uploadModal = document.getElementById('uploadModal');
+const modalBackdrop = document.getElementById('modalBackdrop');
+
+let currentUser = null;
+let userData = null;
+let currentTab = 'short';
+let currentView = 'home';
+let unsubFeed = null;
+let uploadType = 'short';
+let lang = 'en';
+
+const i18n = {
+  en: { welcome:"Hi", noContent:"No content yet. Tap + to create!", comingSoon:"Coming soon — games, challenges & rewards." },
+  de: { welcome:"Hi", noContent:"Noch keine Inhalte. Tippe auf + zum Erstellen!", comingSoon:"Bald verfügbar — Spiele, Challenges & Belohnungen." }
+};
+
+const setErr = (id,msg)=>{ const el=document.getElementById(id); if(!el) return; el.textContent=msg||''; el.classList.toggle('hidden',!msg); };
+const clearAuthErrs = ()=>['err-siEmail','err-siPass','err-siGeneral','err-suName','err-suUser','err-suEmail','err-suPass','err-suPass2','err-suGeneral'].forEach(id=>setErr(id,''));
+
+// Auth tabs
+tabSignin.onclick = () => {
+  formSignin.classList.remove('hidden'); formSignup.classList.add('hidden');
+  tabSignin.classList.add('bg-[#1a1a1a]','text-white'); tabSignin.classList.remove('text-white/60');
+  tabSignup.classList.remove('bg-[#1a1a1a]','text-white'); tabSignup.classList.add('text-white/60');
+  clearAuthErrs();
+};
+tabSignup.onclick = () => {
+  formSignup.classList.remove('hidden'); formSignin.classList.add('hidden');
+  tabSignup.classList.add('bg-[#1a1a1a]','text-white'); tabSignup.classList.remove('text-white/60');
+  tabSignin.classList.remove('bg-[#1a1a1a]','text-white'); tabSignin.classList.add('text-white/60');
+  clearAuthErrs();
+};
+
+// Username auto-format
+document.getElementById('suUser').addEventListener('input', e=>{
+  let v = e.target.value.toLowerCase();
+  v = v.replace(/[\s-]+/g,'_').replace(/[^a-z0-9_]/g,'');
+  e.target.value = v;
+});
+
+// Sign In
+formSignin.addEventListener('submit', async (e)=>{
+  e.preventDefault(); clearAuthErrs();
+  const email = document.getElementById('siEmail').value.trim();
+  const pass = document.getElementById('siPass').value;
+  let err=false;
+  if(!email){ setErr('err-siEmail','Email required'); err=true; }
+  if(!pass){ setErr('err-siPass','Password required'); err=true; }
+  if(err) return;
+  const btn=document.getElementById('btnSignin'); btn.disabled=true; btn.textContent='Signing in...';
+  try{
+    await signInWithEmailAndPassword(auth,email,pass);
+  }catch(ex){
+    setErr('err-siGeneral', ex.message.replace('Firebase: ',''));
+  }finally{ btn.disabled=false; btn.textContent='Sign In'; }
+});
+
+// Sign Up
+formSignup.addEventListener('submit', async (e)=>{
+  e.preventDefault(); clearAuthErrs();
+  const name = document.getElementById('suName').value.trim();
+  const username = document.getElementById('suUser').value.trim();
+  const email = document.getElementById('suEmail').value.trim();
+  const pass = document.getElementById('suPass').value;
+  const pass2 = document.getElementById('suPass2').value;
+  let err=false;
+  if(name.length<2){ setErr('err-suName','Enter your name'); err=true; }
+  if(username.length<3 || !/^[a-z0-9_]+$/.test(username)){ setErr('err-suUser','3+ chars, a-z 0-9 _'); err=true; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ setErr('err-suEmail','Valid email required'); err=true; }
+  if(pass.length<6){ setErr('err-suPass','Min 6 characters'); err=true; }
+  if(pass!==pass2){ setErr('err-suPass2','Passwords do not match'); err=true; }
+  if(err) return;
+  const btn=document.getElementById('btnSignup'); btn.disabled=true; btn.textContent='Creating...';
+  try{
+    const cred = await createUserWithEmailAndPassword(auth,email,pass);
+    await updateProfile(cred.user,{displayName:name});
+    await setDoc(doc(db,'users',cred.user.uid),{
+      displayName:name, username, email, createdAt: serverTimestamp(), country:''
+    });
+  }catch(ex){
+    setErr('err-suGeneral', ex.message.replace('Firebase: ',''));
+  }finally{ btn.disabled=false; btn.textContent='Create Account'; }
+});
+
+// Auth state
+onAuthStateChanged(auth, async (user)=>{
+  if(user){
+    currentUser = user;
+    authScreen.classList.add('hidden');
+    appEl.classList.remove('hidden');
+    welcome.textContent = `${i18n[lang].welcome}, ${(user.displayName||'there').split(' ')[0]}`;
+    // load user doc
+    try{
+      const uref = doc(db,'users',user.uid);
+      const snap = await getDoc(uref);
+      userData = snap.exists()? snap.data(): {displayName:user.displayName, username:''};
+      // geo
+      fetch('https://ipapi.co/json/').then(r=>r.json()).then(async geo=>{
+        const country = geo.country_name || '';
+        const code = geo.country_code || '';
+        lang = ['DE','AT','CH'].includes(code) ? 'de' : 'en';
+        welcome.textContent = `${i18n[lang].welcome}, ${(user.displayName||'there').split(' ')[0]}`;
+        try{ await updateDoc(uref,{ country, lastLogin: serverTimestamp() }); }catch{}
+        if(userData) userData.country = country;
+      }).catch(()=>{});
+    }catch{}
+    switchTab('short');
+    setView('home');
+  }else{
+    currentUser=null; userData=null;
+    appEl.classList.add('hidden');
+    authScreen.classList.remove('hidden');
+    if(unsubFeed) unsubFeed();
+  }
+});
+
+// Tabs
+document.querySelectorAll('.tab-pill').forEach(b=>{
+  b.onclick = ()=> switchTab(b.dataset.tab);
+});
+function switchTab(tab){
+  if(currentView!=='home') setView('home');
+  currentTab = tab;
+  document.querySelectorAll('.tab-pill').forEach(btn=>{
+    const active = btn.dataset.tab===tab;
+    btn.classList.toggle('bg-gradient-to-r', active);
+    btn.classList.toggle('from-[#ff2d75]', active);
+    btn.classList.toggle('to-[#7c3aed]', active);
+    btn.classList.toggle('text-white', active);
+    btn.classList.toggle('bg-white/5', !active);
+    btn.classList.toggle('text-white/60', !active);
+  });
+  if(tab==='game'){ renderGame(); return; }
+  loadFeed(tab);
+}
+function loadFeed(tab){
+  if(unsubFeed){ unsubFeed(); unsubFeed=null; }
+  feed.innerHTML = `<div class="flex items-center justify-center h-[60vh]"><div class="w-8 h-8 border-2 border-white/20 border-t-[#ff2d75] rounded-full animate-spin"></div></div>`;
+  const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
+  unsubFeed = onSnapshot(q, snap=>{
+    const typeMap={short:'short',video:'video',photo:'photo',text:'text'};
+    const docs = snap.docs.filter(d=>d.data().type===typeMap[tab]);
+    if(docs.length===0){
+      feed.innerHTML = `<div class="flex flex-col items-center justify-center h-[60vh] text-center px-8"><div class="w-20 h-20 rounded-full bg-gradient-to-r from-[#ff2d75]/20 to-[#7c3aed]/20 flex items-center justify-center mb-4"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#g)" stroke-width="1.5"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#ff2d75"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M12 5v14M5 12h14"/></svg></div><p class="text-white/70 text-[15px]">${i18n[lang].noContent}</p></div>`;
+      return;
+    }
+    if(tab==='short') renderShorts(docs);
+    else if(tab==='video') renderVideos(docs);
+    else if(tab==='photo') renderPhotos(docs);
+    else if(tab==='text') renderTexts(docs);
+  }, err=>{
+    feed.innerHTML = `<div class="p-6 text-center text-red-400 text-sm">${err.message}</div>`;
+  });
+}
+function renderShorts(docs){
+  feed.innerHTML = `<div class="snap-y snap-mandatory h-[calc(100vh-180px)] overflow-y-auto px-3 py-3 space-y-4 scrollbar-hide" id="shortsWrap"></div>`;
+  const wrap = document.getElementById('shortsWrap');
+  docs.forEach(d=>{
+    const p=d.data();
+    const item=document.createElement('div');
+    item.className="relative snap-start h-[calc(100vh-210px)] bg-[#111] rounded-[28px] overflow-hidden";
+    item.innerHTML=`<video src="${p.url}" class="w-full h-full object-cover" autoplay muted loop playsinline></video>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 right-0 p-4">
+      <div class="flex items-center gap-2.5 mb-2">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] flex items-center justify-center text-[13px] font-bold">${(p.displayName||'U').charAt(0).toUpperCase()}</div>
+        <div><p class="text-[14px] font-semibold leading-tight">${p.displayName||'User'}</p><p class="text-[12px] text-white/70 -mt-0.5">@${p.username||'user'}</p></div>
+      </div>
+      <p class="text-[14px] text-white/90 leading-snug">${(p.caption||'').slice(0,120)}</p>
+    </div>`;
+    wrap.appendChild(item);
+  });
+}
+function renderVideos(docs){
+  feed.innerHTML = `<div class="grid grid-cols-2 gap-2.5 p-3" id="vg"></div>`;
+  const g=document.getElementById('vg');
+  docs.forEach(d=>{
+    const p=d.data();
+    const c=document.createElement('div');
+    c.className="relative aspect-[9/16] bg-[#111] rounded-[20px] overflow-hidden";
+    c.innerHTML=`<video src="${p.url}" class="w-full h-full object-cover" muted preload="metadata"></video>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
+    <div class="absolute bottom-0 p-2.5 w-full"><p class="text-[12px] line-clamp-2 leading-snug">${p.caption||''}</p><p class="text-[10px] text-white/60 mt-1">@${p.username||''}</p></div>`;
+    g.appendChild(c);
+  });
+}
+function renderPhotos(docs){
+  feed.innerHTML=`<div class="grid grid-cols-3 gap-[2px] p-2" id="pg"></div>`;
+  const g=document.getElementById('pg');
+  docs.forEach(d=>{
+    const p=d.data();
+    const c=document.createElement('div');
+    c.className="aspect-square bg-[#111] overflow-hidden";
+    c.innerHTML=`<img src="${p.url}" class="w-full h-full object-cover hover:scale-105 transition duration-300" loading="lazy">`;
+    g.appendChild(c);
+  });
+}
+function renderTexts(docs){
+  feed.innerHTML=`<div class="p-3 space-y-3" id="tl"></div>`;
+  const l=document.getElementById('tl');
+  docs.forEach(d=>{
+    const p=d.data(); const t=p.createdAt?.toDate? p.createdAt.toDate().toLocaleDateString(lang==='de'?'de-DE':'en-US',{month:'short',day:'numeric'}):'';
+    const c=document.createElement('div');
+    c.className="bg-[#141414] border border-white/[0.06] rounded-[22px] p-4";
+    c.innerHTML=`<div class="flex items-center gap-2.5 mb-3">
+      <div class="w-9 h-9 rounded-full bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] flex items-center justify-center text-[13px] font-bold">${(p.displayName||'U').charAt(0).toUpperCase()}</div>
+      <div class="flex-1"><p class="text-[14px] font-semibold leading-none">${p.displayName||'User'}</p><p class="text-[12px] text-white/50">@${p.username||'user'} · ${t}</p></div>
+    </div>
+    <p class="text-[15px] leading-[1.5] whitespace-pre-wrap">${p.caption||''}</p>`;
+    l.appendChild(c);
+  });
+}
+function renderGame(){
+  if(unsubFeed){ unsubFeed(); unsubFeed=null; }
+  feed.innerHTML=`<div class="flex flex-col items-center justify-center h-[60vh] text-center px-10"><div class="text-[64px] mb-4">🎮</div><h3 class="text-[22px] font-bold mb-2">YouGame</h3><p class="text-white/60 text-[14px] leading-snug">${i18n[lang].comingSoon}</p></div>`;
+}
+
+// Bottom nav
+document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+function setView(v){
+  currentView=v;
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    const active=b.dataset.view===v;
+    b.classList.toggle('text-white',active);
+    b.classList.toggle('text-white/50',!active);
+  });
+  if(v==='home'){ document.querySelector('header').classList.remove('hidden'); loadFeed(currentTab); }
+  else if(v==='search'){ document.querySelector('header').classList.add('hidden'); feed.innerHTML=`<div class="p-4 pt-6"><div class="bg-[#141414] border border-white/10 rounded-2xl px-4 py-3 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-white/40"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke-width="2"/></svg><input placeholder="${lang==='de'?'Suchen...':'Search...'}" class="bg-transparent outline-none flex-1 text-[15px] placeholder:text-white/30"></div><p class="text-center text-white/40 text-sm mt-20">${lang==='de'?'Finde Creator und Trends':'Find creators and trends'}</p></div>`; if(unsubFeed) unsubFeed(); }
+  else if(v==='inbox'){ document.querySelector('header').classList.add('hidden'); feed.innerHTML=`<div class="flex flex-col items-center justify-center h-[60vh] text-white/50"><p>${lang==='de'?'Keine Nachrichten':'No messages yet'}</p></div>`; if(unsubFeed) unsubFeed(); }
+  else if(v==='profile'){ document.querySelector('header').classList.add('hidden'); renderProfile(); if(unsubFeed) unsubFeed(); }
+}
+async function renderProfile(){
+  const u=currentUser; if(!u) return;
+  const d=userData||{};
+  feed.innerHTML=`<div class="px-5 pt-8 pb-6">
+    <div class="flex flex-col items-center text-center">
+      <div class="w-[96px] h-[96px] rounded-full bg-gradient-to-r from-[#ff2d75] to-[#7c3aed] flex items-center justify-center text-[36px] font-black shadow-lg shadow-[#ff2d75]/20">${(d.displayName||u.displayName||'U').charAt(0).toUpperCase()}</div>
+      <h2 class="text-[24px] font-bold mt-4">${d.displayName||u.displayName||'User'}</h2>
+      <p class="text-white/60 text-[14px]">@${d.username||'username'}</p>
+      <p class="text-white/40 text-[13px] mt-1">${d.country||''}</p>
+      <div class="flex gap-6 mt-6">
+        <div class="text-center"><p class="font-bold">0</p><p class="text-xs text-white/50">${lang==='de'?'Posts':'Posts'}</p></div>
+        <div class="text-center"><p class="font-bold">0</p><p class="text-xs text-white/50">Followers</p></div>
+        <div class="text-center"><p class="font-bold">0</p><p class="text-xs text-white/50">Following</p></div>
+      </div>
+      <button id="btnLogout" class="mt-8 w-full max-w-[280px] py-3 rounded-2xl bg-white/5 border border-white/10 font-medium active:scale-[0.98] transition">${lang==='de'?'Abmelden':'Log out'}</button>
+    </div>
+  </div>`;
+  document.getElementById('btnLogout').onclick=()=>signOut(auth);
+}
+
+// Upload modal
+const fileInput=document.getElementById('fileInput');
+const pickFile=document.getElementById('pickFile');
+const fileName=document.getElementById('fileName');
+const caption=document.getElementById('caption');
+const btnUpload=document.getElementById('btnUpload');
+const progressWrap=document.getElementById('progressWrap');
+const progressBar=document.getElementById('progressBar');
+const progressText=document.getElementById('progressText');
+const uploadError=document.getElementById('uploadError');
+const fileWrap=document.getElementById('fileWrap');
+
+btnPlus.onclick=()=>openModal();
+modalBackdrop.onclick=()=>closeModal();
+function openModal(){ uploadModal.classList.remove('hidden'); document.body.style.overflow='hidden'; resetUpload(); }
+function closeModal(){ uploadModal.classList.add('hidden'); document.body.style.overflow=''; }
+
+document.querySelectorAll('.utype').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.utype').forEach(x=>{x.classList.remove('bg-gradient-to-r','from-[#ff2d75]','to-[#7c3aed]'); x.classList.add('bg-white/10','text-white/70')});
+    b.classList.add('bg-gradient-to-r','from-[#ff2d75]','to-[#7c3aed]'); b.classList.remove('bg-white/10','text-white/70');
+    uploadType=b.dataset.utype;
+    if(uploadType==='short' || uploadType==='video'){ fileInput.accept='video/*'; pickFile.textContent='Tap to select video'; fileWrap.classList.remove('hidden'); }
+    else if(uploadType==='photo'){ fileInput.accept='image/*'; pickFile.textContent='Tap to select photo'; fileWrap.classList.remove('hidden'); }
+    else { fileWrap.classList.add('hidden'); }
+    fileInput.value=''; fileName.classList.add('hidden');
+  };
+});
+pickFile.onclick=()=>fileInput.click();
+fileInput.onchange=()=>{ if(fileInput.files[0]){ fileName.textContent=fileInput.files[0].name; fileName.classList.remove('hidden'); pickFile.textContent='Change file'; } };
+
+btnUpload.onclick=async()=>{
+  uploadError.classList.add('hidden');
+  const cap=caption.value.trim();
+  if(uploadType!=='text' && !fileInput.files[0]){ uploadError.textContent='Please select a file'; uploadError.classList.remove('hidden'); return; }
+  if(uploadType==='text' && !cap){ uploadError.textContent='Write something'; uploadError.classList.remove('hidden'); return; }
+  if(!currentUser){ uploadError.textContent='Not signed in'; uploadError.classList.remove('hidden'); return; }
+  btnUpload.disabled=true; btnUpload.textContent='Uploading...'; progressWrap.classList.remove('hidden'); progressBar.style.width='0%'; progressText.textContent='Starting...';
+  try{
+    let url='';
+    if(uploadType!=='text'){
+      const file=fileInput.files[0];
+      const path=`posts/${currentUser.uid}/${Date.now()}_${file.name.replace(/[^a-z0-9.\-_]/gi,'_')}`;
+      const storageRef=ref(storage,path);
+      const task=uploadBytesResumable(storageRef,file);
+      await new Promise((resolve,reject)=>{
+        task.on('state_changed', snap=>{
+          const pct=Math.round(snap.bytesTransferred/snap.totalBytes*100);
+          progressBar.style.width=pct+'%'; progressText.textContent=`Uploading ${pct}%`;
+        }, reject, async()=>{ url=await getDownloadURL(task.snapshot.ref); resolve(); });
+      });
+    }
+    // ensure latest user data
+    if(!userData){ const s=await getDoc(doc(db,'users',currentUser.uid)); userData=s.data(); }
+    await addDoc(collection(db,'posts'),{
+      uid: currentUser.uid,
+      username: userData?.username || '',
+      displayName: userData?.displayName || currentUser.displayName || 'User',
+      type: uploadType,
+      url,
+      caption: cap,
+      createdAt: serverTimestamp(),
+      country: userData?.country || ''
+    });
+    closeModal();
+    // switch to relevant tab
+    const map={short:'short',video:'video',photo:'photo',text:'text'};
+    switchTab(map[uploadType]); setView('home');
+  }catch(e){
+    uploadError.textContent=e.message; uploadError.classList.remove('hidden');
+  }finally{
+    btnUpload.disabled=false; btnUpload.textContent='Upload'; progressWrap.classList.add('hidden');
+  }
+};
+function resetUpload(){
+  caption.value=''; fileInput.value=''; fileName.classList.add('hidden'); pickFile.textContent='Tap to select video';
+  uploadError.classList.add('hidden'); progressWrap.classList.add('hidden');
+  uploadType='short';
+  document.querySelectorAll('.utype').forEach((b,i)=>{if(i===0){b.classList.add('bg-gradient-to-r','from-[#ff2d75]','to-[#7c3aed]'); b.classList.remove('bg-white/10','text-white/70')}else{b.classList.remove('bg-gradient-to-r','from-[#ff2d75]','to-[#7c3aed]'); b.classList.add('bg-white/10','text-white/70')}});
+}
+</script>
+<script>(function(){document.addEventListener("click",function(e){var a=e.target.closest("[data-product-id]");if(!a)return;e.preventDefault();var pid=a.getAttribute("data-product-id");if(pid)parent.postMessage({type:"ecto-artifact-link-click",productId:pid},"*")})})();</script>
+</body>
+</html>
