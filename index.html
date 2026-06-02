@@ -167,13 +167,14 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://w
 // --- REPLACE WITH YOUR CONFIG ---
 const firebaseConfig = {
   apiKey: "AIzaSyB1N1EnyMNjXMV3agCX3yY_eobHyosuHeU",
-  authDomain: "youtic-app.firebaseapp.com",
-  projectId: "youtic-app",
-  storageBucket: "youtic-app.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:000000000000"
+  authDomain: "youtic-cc29f.firebaseapp.com",
+  databaseURL: "https://youtic-cc29f-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "youtic-cc29f",
+  storageBucket: "youtic-cc29f.firebasestorage.app", // <- wichtig: neuer Bucket-Name
+  messagingSenderId: "670722990364",
+  appId: "1:670722990364:web:e038e90a00481a97599ad9",
+  measurementId: "G-QSF9VX97CL"
 };
-
 const appFB = initializeApp(firebaseConfig);
 const auth = getAuth(appFB);
 const db = getFirestore(appFB);
